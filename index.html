@@ -31,22 +31,21 @@ body{
   background:linear-gradient(135deg,var(--pink),var(--yellow));color:#fff;position:relative;}
 .app-title{font-size:1.8rem;font-weight:600;}
 .app-subtitle{font-size:1rem;opacity:.9;}
-/* Botão do menu no topo direito */
 #fab {
-  margin-right: 60%;
+  margin-right: 90%;
   position: absolute;
   top: calc(90% + 10px);
   right: 10px;
-  width: 80px;
+  width: 40px;
   height: 40px;
-  border-radius: 10%;
+  border-radius: 50%;
   background: var(--teal);
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
-  font-size: 1.55rem;
+  font-size: 1.20rem;
   box-shadow: 0 4px 12px var(--shadow);
   cursor: pointer;
   transition: .3s;
@@ -67,6 +66,8 @@ body{
 .translation{display:block;font-size:3rem;font-weight:600;margin-top:.25rem;}
 .audio-btn{position:absolute;top:16px;right:16px;background:var(--surface);color:var(--pink);
   border:none;font-size:1.5rem;cursor:pointer;}
+
+/* Menu lateral vocab */
 #vocab-panel{
   position:fixed;top:0;right:-320px;width:300px;height:100%;background:var(--surface);
   box-shadow:-4px 0 12px var(--shadow);padding:1rem;overflow-y:auto;transition:.4s;
@@ -76,12 +77,55 @@ body{
 .vocab-item{padding:.5rem .25rem;border-bottom:1px solid var(--kbd);}
 .vocab-item span{display:block;}
 .vocab-item .kor{font-weight:600;}
-.keyboard-wrapper{background:var(--kbd);box-shadow:0 -2px 10px var(--shadow);
-  padding:.5rem .5rem 1rem;}
-.keyboard-header{display:flex;justify-content:center;gap:10px;margin-bottom:.5rem;flex-wrap:wrap;}
-.key{background:var(--surface);border:none;border-radius:6px;padding:.6rem 1rem;font-size:1rem;
-  cursor:pointer;box-shadow:0 2px 4px var(--shadow);color:var(--text);}
-.key.special{background:var(--pink);color:#fff;}
+
+/* Teclado */
+.keyboard-wrapper{
+  background:var(--kbd);box-shadow:0 -2px 10px var(--shadow);
+  padding:.5rem .5rem 1rem;
+  overflow: hidden;
+}
+.keyboard-header{
+  display:flex;justify-content:center;gap:10px;margin-bottom:.5rem;flex-wrap:wrap;
+}
+#keyboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
+#keyboard-container .row {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.key {
+  background: var(--surface);
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px var(--shadow);
+  color: var(--text);
+  text-align: center;
+  flex: 1 1 auto;
+  min-width: 3rem;
+  max-width: 80px;
+  transition: all 0.2s ease;
+}
+.key.special {
+  background: var(--pink);
+  color: #fff;
+  font-weight: 600;
+}
+.key:active {
+  background: var(--teal);
+  color: #fff;
+}
 #micBtn {
   background: var(--pink);
   color: #fff;
@@ -92,87 +136,29 @@ body{
   cursor: pointer;
   box-shadow: 0 2px 4px var(--shadow);
 }
-#keyboard{display:grid;grid-template-columns:repeat(10,1fr);gap:.35rem;justify-items:center;}
-.row{display:contents;}
+
+/* Responsividade teclado */
+@media (max-width: 600px) {
+  #keyboard-container {
+    transform: scale(0.8);
+  }
+}
+@media (max-width: 400px) {
+  #keyboard-container {
+    transform: scale(0.65);
+  }
+  .key {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+/* Texto menor em telas pequenas */
 @media(max-width:480px){
   .translation{font-size:2.2rem;}
   .romanization{font-size:1.35rem;}
-  .key{padding:.55rem .7rem;font-size:.95rem;}
-}
-#keyboard {
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
 }
 
-#keyboard-container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  user-select: none;
-}
-
-#keyboard-container .row {
-  display: flex;
-  justify-content: center;
-  gap: 0.3rem;
-}
-
-.key {
-  min-width: 3.2rem;
-  padding: 0.55rem 0.7rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 4px var(--shadow);
-  background: var(--surface);
-  color: var(--text);
-  transition: background 0.2s ease;
-}
-
-.key.special {
-  background: var(--pink);
-  color: #fff;
-  font-weight: 600;
-}
-
-.key:active {
-  background: var(--teal);
-  color: #fff;
-}
-
-@media (max-width: 480px) {
-  #keyboard-container {
-    max-width: 100%;
-  }
-  .key {
-    min-width: 2.6rem;
-    padding: 0.5rem 0.6rem;
-    font-size: 0.9rem;
-  }
-
-  .key.special.active {
-  background: var(--teal);
-  color: #fff;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: var(--surface);
-  border: none;
-  padding: 10px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-
-}
 
 </style>
 </head>
@@ -184,7 +170,7 @@ body{
   <p class="app-subtitle">Ouça, digite e aprenda em tempo real</p>
   <!-- Botão do menu no topo direito -->
   <button id="fab" aria-label="Menu principal">
-    <i class="menu">Menu</i>
+    <i class="menu">M</i>
   </button>
 </header>
 
@@ -223,7 +209,7 @@ body{
 <!-- 3. Teclado virtual -->
 <footer class="keyboard-wrapper">
   <div class="keyboard-header">
-    <button id="langToggle"  class="key special">PT / KR</button>
+    <button id="langToggle"  class="key special">PT/KR</button>
     <button id="capsToggle"  class="key special">Caps</button>
     <button id="themeToggle" class="key special"><i class="fa-solid fa-moon"></i></button>
     <!-- Botão de microfone dentro do teclado -->
@@ -272,18 +258,63 @@ let inputBuffer = '';
 // BIBLIOTECA OFFLINE (edite aqui para incluir manualmente frases/palavras)
 // =========================
 const bibliotecaFrases = {
-  familia: [
-    { pt: "pai", ko: "아버지", roman: "abeoji" },
-    { pt: "mae", ko: "어머니", roman: "eomeoni" },
-    { pt: "irmão", ko: "형", roman: "hyeong" },
-    { pt: "irmã", ko: "누나", roman: "nuna" }
-  ],
-  escola: [
-    { pt: "professor", ko: "선생님", roman: "seonsaengnim" },
-    { pt: "aluno", ko: "학생", roman: "haksaeng" },
-    { pt: "livro", ko: "책", roman: "chaek" }
-  ],
-  // adicione mais categorias conforme necessário (com chaves amigáveis)
+   familia_pal: [
+      { pt: "pai", ko: "아버지", roman: "abeoji" },
+      { pt: "mãe", ko: "어머니", roman: "eomeoni" },
+      { pt: "irmão", ko: "형", roman: "hyeong" },
+      { pt: "irmã", ko: "누나", roman: "nuna" }
+    ],
+    frases: [
+      { pt: "Meu pai está em casa.", ko: "아버지는 집에 있어요.", roman: "abeojineun jibe isseoyo" },
+      { pt: "Minha mãe cozinha bem.", ko: "어머니는 요리를 잘해요.", roman: "eomeonineun yorireul jalhaeyo" },
+      { pt: "Meu irmão é estudante.", ko: "형은 학생이에요.", roman: "hyeongeun haksaeng-ieyo" },
+      { pt: "Minha irmã gosta de música.", ko: "누나는 음악을 좋아해요.", roman: "nunaneun eumageul joahaeyo" }
+    ],
+
+  escola_pal: [
+      { pt: "professor", ko: "선생님", roman: "seonsaengnim" },
+      { pt: "aluno", ko: "학생", roman: "haksaeng" },
+      { pt: "livro", ko: "책", roman: "chaek" }
+    ],
+    frases: [
+      { pt: "O professor está na sala.", ko: "선생님은 교실에 있어요.", roman: "seonsaengnimeun gyosire isseoyo" },
+      { pt: "O aluno estuda coreano.", ko: "학생은 한국어를 공부해요.", roman: "haksaengeun hangugeoreul gongbuhaeyo" },
+      { pt: "Eu leio um livro.", ko: "저는 책을 읽어요.", roman: "jeoneun chaegeul ilgeoyo" }
+    ],
+
+  restaurante_pal: [
+      { pt: "comida", ko: "음식", roman: "eumsik" },
+      { pt: "água", ko: "물", roman: "mul" },
+      { pt: "garçom", ko: "웨이터", roman: "weiteo" }
+    ],
+    frases: [
+      { pt: "A comida é gostosa.", ko: "음식이 맛있어요.", roman: "eumsigi masisseoyo" },
+      { pt: "Eu quero água.", ko: "물을 원해요.", roman: "mureul wonhaeyo" },
+      { pt: "O garçom vem rápido.", ko: "웨이터가 빨리 와요.", roman: "weiteoga ppalli wayo" }
+    ],
+
+  viagem_pal: [
+      { pt: "ônibus", ko: "버스", roman: "beoseu" },
+      { pt: "avião", ko: "비행기", roman: "bihaenggi" },
+      { pt: "hotel", ko: "호텔", roman: "hotel" }
+    ],
+    frases: [
+      { pt: "Eu pego o ônibus.", ko: "버스를 타요.", roman: "beoseureul tayo" },
+      { pt: "O avião é grande.", ko: "비행기는 커요.", roman: "bihaenggineun keoyo" },
+      { pt: "O hotel é perto.", ko: "호텔은 가까워요.", roman: "hotereun gakkawoyo" }
+    ],
+
+  casa_pal: [
+      { pt: "porta", ko: "문", roman: "mun" },
+      { pt: "cama", ko: "침대", roman: "chimdae" },
+      { pt: "cozinha", ko: "부엌", roman: "bueok" }
+    ],
+    frases: [
+      { pt: "A porta está aberta.", ko: "문이 열려 있어요.", roman: "muni yeollyeo isseoyo" },
+      { pt: "A cama é confortável.", ko: "침대는 편해요.", roman: "chimdaeneun pyeonhaeyo" },
+      { pt: "A cozinha é pequena.", ko: "부엌은 작아요.", roman: "bueogeun jagayo" }
+    ],
+  
 };
 
 // Função para criar o menu suspenso com abas e frases/palavras da biblioteca
