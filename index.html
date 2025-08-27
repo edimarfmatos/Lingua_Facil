@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Português ↔ 한국어 • Aprenda Conversando</title>
+
+<!-- Fontes & Ícones -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- ======  CSS  ====== -->
+<style>
+:root{
+  --pink:#ff6f69; --teal:#4ecdc4; --yellow:#ffe66d;
+  --bg:#f5f7fa;   --surface:#ffffff;  --text:#333;
+  --kbd:#eeeeee;  --shadow:rgba(0,0,0,.08);
+}
+body.dark{
+  --pink:#ff8d86; --teal:#55e0d8; --yellow:#ffea8b;
+  --bg:#1b1d24;   --surface:#242631; --text:#f5f7fa;
+  --kbd:#30333d;  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{
+  background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; min-height:100vh; transition:.3s;
+}
+.app-header{text-align:center;padding:1.8rem 1rem;
+  background:linear-gradient(135deg,var(--pink),var(--yellow));color:#fff;position:relative;}
+.app-title{font-size:1.8rem;font-weight:600;}
+.app-subtitle{font-size:1rem;opacity:.9;}
+/* Botão do menu no topo direito */
+#fab {
+  margin-right: 60%;
+  position: absolute;
+  top: calc(90% + 10px);
+  right: 10px;
+  width: 80px;
+  height: 40px;
+  border-radius: 10%;
+  background: var(--teal);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 1.55rem;
+  box-shadow: 0 4px 12px var(--shadow);
+  cursor: pointer;
+  transition: .3s;
+}
+.fab.open{transform:rotate(45deg);}
+.fab-menu{position:fixed;bottom:170px;right:30px;display:flex;flex-direction:column;gap:10px;
+  opacity:0;pointer-events:none;transition:.3s;}
+.fab-menu.show{opacity:1;pointer-events:auto;}
+.fab-item{background:var(--surface);color:var(--teal);border:none;padding:.6rem 1rem;
+  border-radius:.6rem;font-weight:600;box-shadow:0 2px 8px var(--shadow);cursor:pointer;}
+.app-main{flex:1;display:flex;justify-content:center;align-items:center;padding:1rem;}
+#topic-panel{
+  background:var(--surface); width:90%; max-width:500px; min-height:180px;
+  border-radius:1rem; box-shadow:0 4px 20px var(--shadow); position:relative;
+}
+.word-display{text-align:center;padding:2rem 1rem;}
+.romanization{display:block;font-size:2rem;color:var(--pink);font-weight:600;}
+.translation{display:block;font-size:3rem;font-weight:600;margin-top:.25rem;}
+.audio-btn{position:absolute;top:16px;right:16px;background:var(--surface);color:var(--pink);
+  border:none;font-size:1.5rem;cursor:pointer;}
+#vocab-panel{
+  position:fixed;top:0;right:-320px;width:300px;height:100%;background:var(--surface);
+  box-shadow:-4px 0 12px var(--shadow);padding:1rem;overflow-y:auto;transition:.4s;
+}
+#vocab-panel.show{right:0;}
+#vocab-panel h2{font-size:1.25rem;margin-bottom:1rem;color:var(--teal);}
+.vocab-item{padding:.5rem .25rem;border-bottom:1px solid var(--kbd);}
+.vocab-item span{display:block;}
+.vocab-item .kor{font-weight:600;}
+.keyboard-wrapper{background:var(--kbd);box-shadow:0 -2px 10px var(--shadow);
+  padding:.5rem .5rem 1rem;}
+.keyboard-header{display:flex;justify-content:center;gap:10px;margin-bottom:.5rem;flex-wrap:wrap;}
+.key{background:var(--surface);border:none;border-radius:6px;padding:.6rem 1rem;font-size:1rem;
+  cursor:pointer;box-shadow:0 2px 4px var(--shadow);color:var(--text);}
+.key.special{background:var(--pink);color:#fff;}
+#micBtn {
+  background: var(--pink);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+#keyboard{display:grid;grid-template-columns:repeat(10,1fr);gap:.35rem;justify-items:center;}
+.row{display:contents;}
+@media(max-width:480px){
+  .translation{font-size:2.2rem;}
+  .romanization{font-size:1.35rem;}
+  .key{padding:.55rem .7rem;font-size:.95rem;}
+}
+#keyboard {
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+#keyboard-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  user-select: none;
+}
+
+#keyboard-container .row {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.key {
+  min-width: 3.2rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px var(--shadow);
+  background: var(--surface);
+  color: var(--text);
+  transition: background 0.2s ease;
+}
+
+.key.special {
+  background: var(--pink);
+  color: #fff;
+  font-weight: 600;
+}
+
+.key:active {
+  background: var(--teal);
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  #keyboard-container {
+    max-width: 100%;
+  }
+  .key {
+    min-width: 2.6rem;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .key.special.active {
+  background: var(--teal);
+  color: #fff;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--surface);
+  border: none;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- 1. Cabeçalho -->
+<header class="app-header">
+  <h1 class="app-title">Conversação Português ↔ 한국어</h1>
+  <p class="app-subtitle">Ouça, digite e aprenda em tempo real</p>
+  <!-- Botão do menu no topo direito -->
+  <button id="fab" aria-label="Menu principal">
+    <i class="menu">Menu</i>
+  </button>
+</header>
+
+<!-- 2. Painel principal -->
+<main class="app-main">
+  <section id="topic-panel">
+    <div class="word-display">
+      <span id="romanization" class="romanization">annyeong</span>
+      <span id="translation"  class="translation">안녕</span>
+      <button id="audioBtn" class="audio-btn" aria-label="Ouvir pronúncia">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- Menu flutuante -->
+<nav id="fab-menu" class="fab-menu">
+  <button class="fab-item" data-topic="frases">Frases</button>
+  <button class="fab-item" data-topic="palavras">Palavras</button>
+  <button class="fab-item" data-topic="novo">Novo Tema</button>
+  <button class="fab-item" id="vocabBtn">Vocabulário</button>
+</nav>
+
+<!-- Painel lateral de vocabulário -->
+<aside id="vocab-panel">
+  <h2>Vocabulário</h2>
+  <div id="vocab-list">
+    <!-- itens injetados por JS -->
+  </div>
+</aside>
+
+<ul id="menu-temas"></ul>
+<div id="conteudo"></div>
+
+<!-- 3. Teclado virtual -->
+<footer class="keyboard-wrapper">
+  <div class="keyboard-header">
+    <button id="langToggle"  class="key special">PT / KR</button>
+    <button id="capsToggle"  class="key special">Caps</button>
+    <button id="themeToggle" class="key special"><i class="fa-solid fa-moon"></i></button>
+    <!-- Botão de microfone dentro do teclado -->
+    <button id="micBtn" aria-label="Reconhecimento de voz">
+      <i class="fa-solid fa-microphone"></i>
+    </button>
+  </div>
+  <div id="keyboard">
+    <!-- linhas e teclas serão construídas via JS -->
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  // =========================
+// PARTE 1 — Núcleo & Teclado
+// =========================
+
+// --- Variáveis globais e referências DOM (mantendo nomes existentes) ---
+const micBtn = document.getElementById('micBtn');
+const langToggleBtn = document.getElementById('langToggle');
+const capsToggleBtn = document.getElementById('capsToggle');
+const themeToggleBtn = document.getElementById('themeToggle');
+const vocabBtn = document.getElementById('vocabBtn');
+const fabBtn = document.getElementById('fab');
+const fabMenu = document.getElementById('fab-menu');
+const vocabPanel = document.getElementById('vocab-panel');
+const vocabList = document.getElementById('vocab-list');
+const romanizationEl = document.getElementById('romanization');
+const translationEl = document.getElementById('translation');
+const topicPanel = document.getElementById('topic-panel');
+
+
+
+// Estado
+let currentLang = 'PT'; // 'PT' ou 'KO'
+let isCaps = false;
+let isNumbersRowVisible = false;
+let isListening = false;
+let recognition = null;
+
+// inputBuffer: string em PT, array em KO
+let inputBuffer = '';
+
+// =========================
+// BIBLIOTECA OFFLINE (edite aqui para incluir manualmente frases/palavras)
+// =========================
+const bibliotecaFrases = {
+  familia: [
+    { pt: "pai", ko: "아버지", roman: "abeoji" },
+    { pt: "mae", ko: "어머니", roman: "eomeoni" },
+    { pt: "irmão", ko: "형", roman: "hyeong" },
+    { pt: "irmã", ko: "누나", roman: "nuna" }
+  ],
+  escola: [
+    { pt: "professor", ko: "선생님", roman: "seonsaengnim" },
+    { pt: "aluno", ko: "학생", roman: "haksaeng" },
+    { pt: "livro", ko: "책", roman: "chaek" }
+  ],
+  // adicione mais categorias conforme necessário (com chaves amigáveis)
+};
+
+// Função para criar o menu suspenso com abas e frases/palavras da biblioteca
+function inicializarMenuBiblioteca() {
+    const menu = document.getElementById('menu-lateral'); // id do seu menu lateral
+    if (!menu) return;
+
+    // Criar container principal
+    const container = document.createElement('div');
+    container.id = 'menu-biblioteca';
+
+    // Função auxiliar para criar uma aba
+    function criarAba(titulo, itens) {
+        const aba = document.createElement('div');
+        aba.classList.add('aba-biblioteca');
+
+        // Cabeçalho da aba com seta
+        const cabecalho = document.createElement('div');
+        cabecalho.classList.add('aba-header');
+        const seta = document.createElement('span');
+        seta.textContent = '▶'; // seta fechada
+        seta.style.cursor = 'pointer';
+        seta.style.marginRight = '5px';
+
+        const tituloElem = document.createElement('span');
+        tituloElem.textContent = titulo;
+
+        cabecalho.appendChild(seta);
+        cabecalho.appendChild(tituloElem);
+        aba.appendChild(cabecalho);
+
+        // Lista oculta de itens
+        const lista = document.createElement('ul');
+        lista.classList.add('aba-lista');
+        lista.style.display = 'none';
+
+        itens.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.frase} — ${item.traducao}`;
+            li.style.cursor = 'pointer';
+
+            li.addEventListener('click', () => {
+                exibirFraseNoDisplay(item.frase, item.traducao);
+            });
+
+            lista.appendChild(li);
+        });
+
+        aba.appendChild(lista);
+
+        // Evento para abrir/fechar
+        cabecalho.addEventListener('click', () => {
+            const aberta = lista.style.display === 'block';
+            lista.style.display = aberta ? 'none' : 'block';
+            seta.textContent = aberta ? '▶' : '▼';
+        });
+
+        return aba;
+    }
+
+    // Separar palavras e frases
+    const palavras = bibliotecaFrases.filter(item => item.tipo === 'palavra');
+    const frases = bibliotecaFrases.filter(item => item.tipo === 'frase');
+
+    // Criar abas e anexar no container
+    container.appendChild(criarAba('Palavras', palavras));
+    container.appendChild(criarAba('Frases', frases));
+
+    // Inserir no menu lateral
+    menu.appendChild(container);
+}
+
+// Função para exibir a frase/palavra no display principal
+function exibirFraseNoDisplay(frase, traducao) {
+    const display = document.getElementById('display'); // ajuste conforme seu id
+    if (!display) return;
+    display.textContent = `${frase} — ${traducao}`;
+
+    // Se já existe alguma função de pronúncia ou destaque, chama aqui
+    if (typeof pronunciarFrase === 'function') {
+        pronunciarFrase(frase);
+    }
+}
+
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', inicializarMenuBiblioteca);
+
+
+// Busca na biblioteca: retorna objeto padrão ou null
+function buscarNaBiblioteca(texto, idioma) {
+  if (!texto) return null;
+  texto = texto.trim().toLowerCase();
+
+  for (const categoria in bibliotecaFrases) {
+    for (const item of bibliotecaFrases[categoria]) {
+      if (idioma === 'PT' && item.pt && item.pt.toLowerCase() === texto) {
+        return { categoria, pt: item.pt, ko: item.ko, roman: item.roman };
+      }
+      if (idioma === 'KO' && item.ko && item.ko === texto) {
+        return { categoria, pt: item.pt, ko: item.ko, roman: item.roman };
+      }
+      // também busca por romanização (ajuda quando o usuário fala romanizado)
+      if (idioma === 'PT' && item.roman && item.roman.toLowerCase() === texto) {
+        return { categoria, pt: item.pt, ko: item.ko, roman: item.roman };
+      }
+    }
+  }
+  return null;
+}
+
+// =========================
+// FUNÇÕES DE EXIBIÇÃO
+// =========================
+function displayMain(koText, roman, ptText) {
+  // mostra coreano + romanização (discreta) + tradução
+  if (currentLang === 'KO') {
+    // principal: hangul, secundário: roman / tradução
+    translationEl.textContent = koText || '';
+    romanizationEl.textContent = roman || '';
+    // opcional: mostrar também pt em menor destaque (aqui juntamos)
+    if (ptText) {
+      // append pequena indicação abaixo (reuso de elements existentes)
+      translationEl.textContent = koText + ' → ' + ptText;
+    }
+  } else {
+    // currentLang === 'PT'
+    romanizationEl.textContent = ptText || '';
+    translationEl.textContent = koText || '';
+  }
+}
+
+// Fallback simples para exibir texto cru (quando não houver pares)
+function displayTextRaw(text) {
+  if (currentLang === 'PT') {
+    romanizationEl.textContent = text || '';
+    translationEl.textContent = '';
+  } else {
+    translationEl.textContent = text || '';
+    romanizationEl.textContent = '';
+  }
+}
+
+// =========================
+// UTIL: debounce para chamadas externas (tradução)
+// =========================
+function debounce(fn, wait) {
+  let t;
+  return function(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
+// =========================
+// TRADUÇÃO ONLINE (LibreTranslate) com fallback na biblioteca
+// =========================
+async function traduzirOnline(texto, origem, destino) {
+  if (!texto || texto.trim() === '') return '';
+  try {
+    const res = await fetch('https://libretranslate.de/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: texto, source: origem, target: destino, format: "text" })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data.translatedText || '';
+  } catch (err) {
+    console.warn('Tradução online falhou:', err.message);
+    return ''; // caller tentará fallback
+  }
+}
+
+// Debounced wrapper para evitar chamadas repetidas
+const debouncedTranslateAndUpdate = debounce(async function() {
+  if (currentLang === 'PT') {
+    // texto em PT -> traduzir para KO (online), senão tentar biblioteca
+    if (!inputBuffer || inputBuffer.trim() === '') {
+      displayTextRaw('');
+      return;
+    }
+    const textoPT = inputBuffer;
+    const trad = await traduzirOnline(textoPT, 'pt', 'ko');
+    if (trad) {
+      // se obteve retorno online
+      displayMain(trad, '', textoPT);
+    } else {
+      // buscar na biblioteca
+      const found = buscarNaBiblioteca(textoPT, 'PT');
+      if (found) displayMain(found.ko, found.roman, found.pt);
+      else displayTextRaw(textoPT);
+    }
+  } else {
+    // currentLang === 'KO': compor hangul e traduzir para PT
+    const hangul = composeHangulForDisplay(inputBuffer);
+    if (!hangul) {
+      displayTextRaw('');
+      return;
+    }
+    const trad = await traduzirOnline(hangul, 'ko', 'pt');
+    if (trad) {
+      displayMain(hangul, '', trad);
+    } else {
+      const found = buscarNaBiblioteca(hangul, 'KO');
+      if (found) displayMain(found.ko, found.roman, found.pt);
+      else displayMain(hangul, '', '');
+    }
+  }
+}, 600);
+
+// =========================
+// COMPOSIÇÃO HANGUL (reutilizável) - atenção: espera buffer array ou string
+// =========================
+const CHOSUNG = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const JUNGSUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+const JONGSUNG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const BATCHIM_COMPOSITE = {'ㄱㅅ':'ㄳ','ㄴㅈ':'ㄵ','ㄴㅎ':'ㄶ','ㄹㄱ':'ㄺ','ㄹㅁ':'ㄻ','ㄹㅂ':'ㄼ','ㄹㅅ':'ㄽ','ㄹㅌ':'ㄾ','ㄹㅍ':'ㄿ','ㄹㅎ':'ㅀ','ㅂㅅ':'ㅄ'};
+
+function composeHangulForDisplay(buffer) {
+  if (!buffer) return '';
+  // if buffer is string, assume already hangul or chars
+  let seq = Array.isArray(buffer) ? buffer.slice() : buffer.split('');
+  // simple fast path: if seq already contains composed syllables, join
+  // but our algorithm tries to compose from jamos
+  let result = '';
+  let i = 0;
+  while (i < seq.length) {
+    if (i + 1 >= seq.length) {
+      result += seq[i];
+      i++;
+      continue;
+    }
+    const c1 = seq[i], c2 = seq[i+1];
+    if (CHOSUNG.indexOf(c1) === -1 || JUNGSUNG.indexOf(c2) === -1) {
+      result += c1;
+      i++;
+      continue;
+    }
+    const chosungIndex = CHOSUNG.indexOf(c1);
+    const jungseongIndex = JUNGSUNG.indexOf(c2);
+    let jongsungIndex = 0;
+
+    if (i + 2 < seq.length) {
+      const c3 = seq[i+2];
+      if (CHOSUNG.includes(c3)) {
+        // test composite batchim with c3+c4
+        if (i+3 < seq.length) {
+          const comp = c3 + seq[i+3];
+          if (BATCHIM_COMPOSITE[comp]) {
+            jongsungIndex = JONGSUNG.indexOf(BATCHIM_COMPOSITE[comp]);
+            result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28) + jongsungIndex);
+            i += 4;
+            continue;
+          }
+        }
+        const c3JongIndex = JONGSUNG.indexOf(c3);
+        if (c3JongIndex !== -1 && c3JongIndex !== 0) {
+          // se o próximo depois de c3 for vogal, então c3 começa sílaba
+          if (i+3 < seq.length && JUNGSUNG.includes(seq[i+3])) {
+            result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28));
+            i += 2;
+            continue;
+          } else {
+            jongsungIndex = c3JongIndex;
+            result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28) + jongsungIndex);
+            i += 3;
+            continue;
+          }
+        } else {
+          result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28));
+          i += 2;
+          continue;
+        }
+      } else {
+        result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28));
+        i += 2;
+        continue;
+      }
+    } else {
+      result += String.fromCharCode(0xAC00 + (chosungIndex * 21 * 28) + (jungseongIndex * 28));
+      i += 2;
+      continue;
+    }
+  }
+  return result;
+}
+
+// =========================
+// LAYOUTS & TRANSLIT MAPS (mantido + invertido para teclado fisico)
+// =========================
+const translitMap = {
+  'ㅂ':'q','ㅈ':'w','ㄷ':'e','ㄱ':'r','ㅅ':'t','ㅛ':'y','ㅕ':'u','ㅑ':'i','ㅐ':'o','ㅔ':'p',
+  'ㅁ':'a','ㄴ':'s','ㅇ':'d','ㄹ':'f','ㅎ':'g','ㅗ':'h','ㅓ':'j','ㅏ':'k','ㅣ':'l',
+  'ㅋ':'z','ㅌ':'x','ㅊ':'c','ㅍ':'v','ㅠ':'b','ㅜ':'n','ㅡ':'m'
+};
+const translitMapCaps = { 'ㅃ':'q','ㅉ':'w','ㄸ':'e','ㄲ':'r','ㅆ':'t','ㅒ':'o','ㅖ':'p' };
+
+const layouts = {
+  PT: [['q','w','e','r','t','y','u','i','o','p'], ['a','s','d','f','g','h','j','k','l'], ['z','x','c','v','b','n','m']],
+  KO: [['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ'], ['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'], ['ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ']],
+  KO_CAPS: [['ㅃ','ㅉ','ㄸ','ㄲ','ㅆ','ㅛ','ㅕ','ㅑ','ㅒ','ㅖ'], ['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'], ['ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ']],
+  NUMBERS: ['1','2','3','4','5','6','7','8','9']
+};
+
+// reverse maps para teclado físico
+const reverseTranslit = {};
+Object.entries(translitMap).forEach(([jamo, lat]) => reverseTranslit[lat] = jamo);
+const reverseTranslitCaps = {};
+Object.entries(translitMapCaps).forEach(([jamo, lat]) => reverseTranslitCaps[lat] = jamo);
+
+// =========================
+// RENDERIZAÇÃO DO TECLADO VIRTUAL (mantendo comportamento anterior)
+// =========================
+(function setupKeyboardDOM() {
+  const keyboardWrapper = document.querySelector('.keyboard-wrapper');
+  const oldKeyboard = document.getElementById('keyboard');
+  if (!keyboardWrapper || !oldKeyboard) return;
+  let container = document.createElement('div');
+  container.id = 'keyboard-container';
+  keyboardWrapper.replaceChild(container, oldKeyboard);
+})();
+
+const keyboardContainer = document.getElementById('keyboard-container');
+
+function renderNumbersRow() {
+  const existingRow = document.getElementById('numbers-row');
+  if (isNumbersRowVisible) {
+    if (!existingRow) {
+      const rowEl = document.createElement('div');
+      rowEl.classList.add('row');
+      rowEl.id = 'numbers-row';
+      layouts.NUMBERS.forEach(num => {
+        const btn = document.createElement('button');
+        btn.className = 'key';
+        btn.textContent = num;
+        btn.addEventListener('click', () => {
+          if (currentLang === 'KO') inputBuffer.push(num);
+          else inputBuffer += num;
+          updateDisplay();
+        });
+        rowEl.appendChild(btn);
+      });
+      keyboardContainer.prepend(rowEl);
+    }
+  } else if (existingRow) {
+    existingRow.remove();
+  }
+}
+
+function renderKeyboard() {
+  if (!keyboardContainer) return;
+  // limpa linhas (exceto numbers handled separate)
+  keyboardContainer.querySelectorAll('.row').forEach(r => r.remove());
+  renderNumbersRow();
+
+  let layoutToUse = (currentLang === 'KO' && isCaps) ? layouts.KO_CAPS : layouts[currentLang];
+
+  layoutToUse.forEach(rowKeys => {
+    const rowEl = document.createElement('div');
+    rowEl.classList.add('row');
+    rowKeys.forEach(key => {
+      const btn = document.createElement('button');
+      btn.className = 'key';
+      const displayChar = (isCaps && currentLang !== 'KO') ? key.toUpperCase() : key;
+      if (currentLang === 'KO' && translitMap[key]) btn.title = translitMap[key];
+      btn.textContent = displayChar;
+      btn.addEventListener('click', () => {
+        if (currentLang === 'KO') {
+          if (inputBuffer.length === 0 && JUNGSUNG.includes(displayChar)) {
+            inputBuffer = ['ㅇ', displayChar];
+          } else {
+            inputBuffer.push(displayChar);
+          }
+        } else {
+          inputBuffer += displayChar;
+        }
+        updateDisplay();
+      });
+      rowEl.appendChild(btn);
+    });
+    keyboardContainer.appendChild(rowEl);
+  });
+
+  // bottom row (funções)
+  const bottomRow = document.createElement('div');
+  bottomRow.classList.add('row');
+
+  const numberBtn = document.createElement('button');
+  numberBtn.className = 'key special';
+  numberBtn.textContent = '123';
+  numberBtn.addEventListener('click', () => {
+    isNumbersRowVisible = !isNumbersRowVisible;
+    renderKeyboard();
+  });
+
+  const spaceBtn = document.createElement('button');
+  spaceBtn.className = 'key special';
+  spaceBtn.textContent = 'Espaço';
+  spaceBtn.style.flex = '1 0 auto';
+  spaceBtn.addEventListener('click', () => {
+    if (currentLang === 'KO') inputBuffer.push(' ');
+    else inputBuffer += ' ';
+    updateDisplay();
+  });
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'key special';
+  deleteBtn.innerHTML = '<i class="fa-solid fa-delete-left"></i>';
+  deleteBtn.addEventListener('click', () => {
+    if (currentLang === 'KO') inputBuffer.pop();
+    else inputBuffer = inputBuffer.slice(0, -1);
+    updateDisplay();
+  });
+
+  bottomRow.appendChild(numberBtn);
+  bottomRow.appendChild(spaceBtn);
+  bottomRow.appendChild(deleteBtn);
+  keyboardContainer.appendChild(bottomRow);
+}
+
+// =========================
+// Teclado físico (keydown) — integrado com reverseTranslit
+// =========================
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+  const key = e.key;
+  if (key === 'Backspace') {
+    e.preventDefault();
+    if (currentLang === 'KO') inputBuffer.pop();
+    else inputBuffer = inputBuffer.slice(0, -1);
+    updateDisplay();
+    return;
+  }
+  if (key === ' ') {
+    e.preventDefault();
+    if (currentLang === 'KO') inputBuffer.push(' ');
+    else inputBuffer += ' ';
+    updateDisplay();
+    return;
+  }
+  if (!/^[a-zA-Z0-9]$/.test(key)) return;
+  e.preventDefault();
+
+  const kl = key.toLowerCase();
+  const capsLockOn = e.getModifierState && e.getModifierState('CapsLock');
+  const shiftOn = e.shiftKey;
+  const useCaps = isCaps || capsLockOn || shiftOn;
+
+  if (currentLang === 'PT') {
+    const ch = useCaps ? kl.toUpperCase() : kl;
+    inputBuffer += ch;
+    updateDisplay();
+    return;
+  }
+
+  // KO input from latins
+  let jamo = useCaps ? (reverseTranslitCaps[kl] || reverseTranslit[kl]) : reverseTranslit[kl];
+  if (!jamo && /^[0-9]$/.test(kl)) {
+    inputBuffer.push(kl);
+    updateDisplay();
+    return;
+  }
+  if (!jamo) return;
+  if (inputBuffer.length === 0 && JUNGSUNG.includes(jamo)) {
+    inputBuffer = ['ㅇ', jamo];
+  } else {
+    inputBuffer.push(jamo);
+  }
+  updateDisplay();
+});
+
+// Inicial render
+renderKeyboard();
+updateDisplay(); // define mais abaixo (PARTE 2)
+// =========================
+// PARTE 2 — Reconhecimento de voz, menu & inicialização
+// =========================
+
+
+// --------- Função de atualização principal (usa debouncedTranslateAndUpdate) ---------
+function updateDisplay() {
+  // assegura formato correto para inputBuffer
+  if (currentLang === 'PT' && Array.isArray(inputBuffer)) inputBuffer = inputBuffer.join('');
+  if (currentLang === 'KO' && typeof inputBuffer === 'string') inputBuffer = inputBuffer.split('');
+
+  // atualiza exibição imediata básica (romanização ou hangul parcial)
+  if (currentLang === 'PT') {
+    romanizationEl.textContent = inputBuffer || '';
+    translationEl.textContent = '';
+  } else {
+    // compõe hangul rapidamente para exibir parcial
+    const hangul = composeHangulForDisplay(inputBuffer);
+    translationEl.textContent = hangul || '';
+    romanizationEl.textContent = '';
+  }
+
+  // chama tradução/busca debounced
+  debouncedTranslateAndUpdate();
+}
+
+// --------- Popula painel lateral de vocabulário e menu flutuante ---------
+function populateVocabPanel() {
+  if (!vocabList) return;
+  vocabList.innerHTML = '';
+
+  for (const categoria in bibliotecaFrases) {
+    const h = document.createElement('h3');
+    h.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+    h.style.color = 'var(--teal)';
+    vocabList.appendChild(h);
+
+    bibliotecaFrases[categoria].forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'vocab-item';
+      div.innerHTML = `<span class="kor">${item.ko}</span><span class="roman">${item.roman}</span><span class="pt">${item.pt}</span>`;
+      // ao clicar em item, coloca no display (modo leitura/exercício)
+      div.addEventListener('click', () => {
+        // mostra conforme idioma atual
+        if (currentLang === 'PT') {
+          displayMain(item.ko, item.roman, item.pt);
+        } else {
+          displayMain(item.ko, item.roman, item.pt);
+        }
+      });
+      vocabList.appendChild(div);
+    });
+  }
+}
+
+// --------- Controle do painel de vocabulário e fab menu ---------
+vocabBtn && vocabBtn.addEventListener('click', () => {
+  vocabPanel.classList.toggle('show');
+});
+
+fabBtn && fabBtn.addEventListener('click', () => {
+  fabBtn.classList.toggle('fab open');
+  fabMenu.classList.toggle('show');
+});
+
+// opções do fab-menu (se existir)
+if (fabMenu) {
+  fabMenu.querySelectorAll('.fab-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const topic = btn.dataset.topic || '';
+      // simples navegação: quando clicar, abrir painel vocab ou filtrar categoria
+      if (topic === 'palavras' || topic === 'frases') {
+        vocabPanel.classList.add('show');
+      } else if (topic === 'novo') {
+        alert('Funcionalidade "Novo Tema" — implementar inserção manual no código.');
+      }
+    });
+  });
+}
+
+// --------- Tradução ao clicar no botão de áudio do painel (audioBtn) ---------
+const audioBtn = document.getElementById('audioBtn');
+if (audioBtn) {
+  audioBtn.addEventListener('click', async () => {
+    // lê o conteúdo atual: se KO, fala KO; se PT, tenta TTS do PT (simples placeholder)
+    const textToSpeak = (currentLang === 'PT') ? inputBuffer : composeHangulForDisplay(inputBuffer);
+    if (!textToSpeak) return;
+    // usar SpeechSynthesis simples
+    const utter = new SpeechSynthesisUtterance(textToSpeak);
+    utter.lang = currentLang === 'PT' ? 'pt-BR' : 'ko-KR';
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utter);
+  });
+}
+
+// --------- Reconhecimento de voz robusto (usa webkit quando disponível) ---------
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+if (SpeechRecognitionAPI) {
+  recognition = new SpeechRecognitionAPI();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  function startListening() {
+    if (!recognition || isListening) return;
+    recognition.lang = (currentLang === 'KO') ? 'ko-KR' : 'pt-BR';
+    try {
+      recognition.start();
+    } catch (err) {
+      console.warn('startListening error', err);
+    }
+  }
+  function stopListening() {
+    if (!recognition || !isListening) return;
+    try {
+      recognition.stop();
+    } catch (err) {
+      console.warn('stopListening error', err);
+    }
+  }
+
+  recognition.onstart = () => {
+    isListening = true;
+    micBtn.disabled = false;
+    micBtn.innerHTML = '<i class="fa-solid fa-waveform-lines"></i>';
+    micBtn.classList.add('listening');
+    console.log('🎤 reconhecimento: onstart');
+  };
+
+  recognition.onend = () => {
+    // onend pode ser chamado por razões diversas; garantir estado consistente
+    isListening = false;
+    micBtn.disabled = false;
+    micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+    micBtn.classList.remove('listening');
+    console.log('🎤 reconhecimento: onend');
+  };
+
+  recognition.onerror = (event) => {
+    console.error('❌ recognition.onerror', event.error);
+    isListening = false;
+    micBtn.disabled = false;
+    micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+    micBtn.classList.remove('listening');
+    // mensagens amigáveis
+    if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+      alert('Permissão de microfone negada. Habilite a permissão nas configurações do navegador.');
+    }
+  };
+
+  recognition.onresult = (event) => {
+    // pegar o último resultado estável
+    const last = event.results[event.results.length - 1];
+    const transcript = last[0].transcript.trim();
+    console.log('🎤 reconhecido:', transcript);
+
+    // Inserir no buffer dependendo do idioma
+    if (currentLang === 'PT') {
+      // adiciona com espaço
+      inputBuffer = (typeof inputBuffer === 'string' ? inputBuffer : inputBuffer.join('')) + (inputBuffer ? ' ' : '') + transcript;
+    } else {
+      // para KO, dividir em chars (se já for hangul composto, mantemos)
+      // tentamos usar caracteres unicode hangul diretamente
+      const asChars = transcript.split('');
+      if (!Array.isArray(inputBuffer)) inputBuffer = [];
+      asChars.forEach(ch => inputBuffer.push(ch));
+    }
+    updateDisplay();
+
+    // procurar na biblioteca e mostrar tradução direta se encontrar
+    const lookup = buscarNaBiblioteca(transcript, currentLang);
+    if (lookup) {
+      // exibir com romanização e tradução
+      displayMain(lookup.ko, lookup.roman, lookup.pt);
+    }
+  };
+
+  // Conecta micBtn
+  micBtn.addEventListener('click', () => {
+    if (!isListening) startListening();
+    else stopListening();
+  });
+} else {
+  micBtn.disabled = true;
+  micBtn.title = 'Reconhecimento de voz não suportado neste navegador.';
+  micBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i>';
+}
+
+// --------- Alternadores de UI (idioma, caps, tema) ---------
+capsToggleBtn && capsToggleBtn.addEventListener('click', () => {
+  isCaps = !isCaps;
+  capsToggleBtn.classList.toggle('active', isCaps);
+  renderKeyboard();
+});
+
+langToggleBtn && langToggleBtn.addEventListener('click', () => {
+  // alterna entre PT e KO
+  currentLang = (currentLang === 'PT') ? 'KO' : 'PT';
+  // reseta inputBuffer ao mudar de modo
+  inputBuffer = (currentLang === 'KO') ? [] : '';
+  // atualiza labels e lang do recognition
+  if (recognition) recognition.lang = (currentLang === 'KO') ? 'ko-KR' : 'pt-BR';
+  renderKeyboard();
+  updateDisplay();
+});
+
+themeToggleBtn && themeToggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
+
+
+// --------- Inicialização final ---------
+(function initAll() {
+  // preencher painel vocab
+  populateVocabPanel();
+  // render teclado e display inicial
+  renderKeyboard();
+  updateDisplay();
+  console.log('JS aprimorado inicializado — pronto para testes de voz e biblioteca offline.');
+
+  // Criar o menu suspenso
+const fabMenu = document.getElementById('fab-menu');
+const vocabPanel = document.getElementById('vocab-panel');
+const vocabList = document.getElementById('vocab-list');
+
+// Função para criar o menu suspenso
+function criarMenuSuspenso() {
+  // Limpar o conteúdo atual do menu
+  vocabList.innerHTML = '';
+
+  // Criar as abas do menu
+  const categorias = Object.keys(bibliotecaFrases);
+  categorias.forEach((categoria) => {
+    const aba = document.createElement('div');
+    aba.classList.add('categoria-aba');
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+    aba.appendChild(titulo);
+
+    const lista = document.createElement('ul');
+    bibliotecaFrases[categoria].forEach((item) => {
+      const li = document.createElement('li');
+      li.textContent = `${item.ko} (${item.roman}) - ${item.pt}`;
+      li.addEventListener('click', () => {
+        exibirPalavraNoDisplay(item);
+      });
+      lista.appendChild(li);
+    });
+    aba.appendChild(lista);
+    vocabList.appendChild(aba);
+  });
+}
+
+// Função para exibir a palavra no display principal
+function exibirPalavraNoDisplay(item) {
+  displayMain(item.ko, item.roman, item.pt);
+  if (currentLang === 'PT') {
+    inputBuffer = item.pt;
+  } else {
+    inputBuffer = item.ko.split('');
+  }
+}
+
+// Criar o menu suspenso quando o botão for clicado
+document.getElementById('fab').addEventListener('click', () => {
+  criarMenuSuspenso();
+  vocabPanel.classList.toggle('show');
+  fabMenu.classList.toggle('show');
+});
+// Adicionar um botão de fechar ao painel lateral
+const closeBtn = document.createElement('button');
+closeBtn.classList.add('close-btn');
+closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+vocabPanel.appendChild(closeBtn);
+
+// Evento para fechar o painel lateral
+closeBtn.addEventListener('click', () => {
+  vocabPanel.classList.remove('show');
+});
+})();
+
+
+</script>
+
+</body>
+</html>
